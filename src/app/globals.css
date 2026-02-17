@@ -1,0 +1,87 @@
+@import "tailwindcss";
+
+@theme {
+  --font-sans: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-geist-mono), ui-monospace, SFMono-Regular, monospace;
+
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+
+  --color-border: var(--border);
+  --animate-accordion-down: accordion-down 0.2s ease-out;
+  --animate-accordion-up: accordion-up 0.2s ease-out;
+
+  @keyframes accordion-down {
+    from { height: 0 }
+    to { height: var(--radix-accordion-content-height) }
+  }
+  @keyframes accordion-up {
+    from { height: var(--radix-accordion-content-height) }
+    to { height: 0 }
+  }
+}
+
+/* Base styles and variables */
+:root {
+  /* Default to dark mode values as requested - "Deep dark mode foundation" */
+  --background: #030712; /* gray-950/zinc-950 mix */
+  --foreground: #f9fafb; /* gray-50 */
+
+  --primary: #6366f1; /* indigo-500 */
+  --primary-foreground: #ffffff;
+
+  --secondary: #1f2937; /* gray-800 */
+  --secondary-foreground: #f3f4f6; /* gray-100 */
+
+  --accent: #8b5cf6; /* violet-500 */
+  --accent-foreground: #ffffff;
+
+  --muted: #111827; /* gray-900 */
+  --muted-foreground: #9ca3af; /* gray-400 */
+
+  --card: #0f172a; /* slate-900 */
+  --card-foreground: #f8fafc; /* slate-50 */
+
+  --border: #1e293b; /* slate-800 */
+}
+
+@layer base {
+  body {
+    background-color: var(--background);
+    color: var(--foreground);
+    @apply antialiased selection:bg-primary/20 selection:text-primary;
+  }
+}
+
+@layer utilities {
+  .glass {
+    @apply backdrop-blur-md bg-white/5 border border-white/10;
+  }
+  
+  .glass-card {
+    @apply backdrop-blur-xl bg-card/40 border border-white/5 shadow-xl shadow-black/20;
+  }
+
+  .text-gradient {
+    @apply bg-clip-text text-transparent bg-gradient-to-r from-primary via-accent to-purple-400;
+  }
+
+  .glow {
+    @apply shadow-[0_0_20px_-5px_rgba(99,102,241,0.4)];
+  }
+}
