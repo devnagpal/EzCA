@@ -5,11 +5,11 @@ This MVP focuses on providing curated **PDF study material** and **audio pocket 
 
 ## Features (Current MVP)
 
-- 📚 Subject-wise study materials
-- 🎧 Audio pocket revision notes
-- 🧭 Clean subject navigation
-- ⚡ Fast, responsive, premium UI
-- 🤖 AI Study Copilot — *coming soon*
+-  Subject-wise study materials
+-  Audio pocket revision notes
+-  Clean subject navigation
+-  Fast, responsive, premium UI
+-  AI Study Copilot — *coming soon*
 
 Subjects included:
 - Business Laws
