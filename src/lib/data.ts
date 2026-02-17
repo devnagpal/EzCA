@@ -69,13 +69,14 @@ export interface StudyResource {
     pages?: number; // for pdf
     size: string;
     chapter: string;
+    fileUrl?: string; // path to the file in public/assets
 }
 
 export const mockResources: Record<string, StudyResource[]> = {
     laws: [
-        { id: "l1", title: "Indian Contract Act - Unit 1", type: "pdf", pages: 12, size: "2.4 MB", chapter: "Contract Act" },
-        { id: "l2", title: "Companies Act - Key Definitions", type: "pdf", pages: 8, size: "1.1 MB", chapter: "Companies Act" },
-        { id: "l3", title: "Contract Act Revision Audio", type: "audio", duration: "15:30", size: "12 MB", chapter: "Contract Act" },
+        { id: "l1", title: "Indian Contract Act - Unit 1", type: "pdf", pages: 12, size: "2.4 MB", chapter: "Contract Act", fileUrl: "/assets/pdfs/sample.pdf" },
+        { id: "l2", title: "Companies Act - Key Definitions", type: "pdf", pages: 8, size: "1.1 MB", chapter: "Companies Act", fileUrl: "/assets/pdfs/sample.pdf" },
+        { id: "l3", title: "Contract Act Revision Audio", type: "audio", duration: "15:30", size: "12 MB", chapter: "Contract Act", fileUrl: "/assets/audio/sample.mp3" },
     ],
     economics: [
         { id: "e1", title: "Demand & Supply Analysis", type: "pdf", pages: 15, size: "3.2 MB", chapter: "Microeconomics" },
