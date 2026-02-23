@@ -74,9 +74,10 @@ export interface StudyResource {
 
 export const mockResources: Record<string, StudyResource[]> = {
     laws: [
-        { id: "l1", title: "Indian Contract Act - Unit 1", type: "pdf", pages: 12, size: "2.4 MB", chapter: "Contract Act", fileUrl: "/assets/pdfs/sample.pdf" },
-        { id: "l2", title: "Companies Act - Key Definitions", type: "pdf", pages: 8, size: "1.1 MB", chapter: "Companies Act", fileUrl: "/assets/pdfs/sample.pdf" },
-        { id: "l3", title: "Contract Act Revision Audio", type: "audio", duration: "15:30", size: "12 MB", chapter: "Contract Act", fileUrl: "/assets/audio/Audio1.mp3" },
+        { id: "l1", title: "Indian Regulatory Framework | Previous Year Questions", type: "pdf", pages: 5, size: "60 KB", chapter: "Indian Regulatory Framework", fileUrl: "/assets/pdfs/INDIAN-REGULATORY-FRAMEWORK-PREVIOUS-YEAR-QUESTIONS.pdf" },
+        { id: "l2", title: "Indian Regulatory Framework | Flash Cards for Quick Revision", type: "pdf", pages: 26, size: "347 KB", chapter: "Companies Act", fileUrl: "/assets/pdfs/INDIAN-REGULATORY-FRAMEWORK-FLASH-CARDS.pdf" },
+        { id: "l3", title: "Indian Regulatory Framework | Full Chapter Audio Revision", type: "audio", duration: "06:08", size: "2.80 MB", chapter: "Indian Regulatory Framework", fileUrl: "/assets/audio/INDIAN-REGULATORY-FRAMEWORK-FULL-CHAPTER-AUDIO-REVISION.mp3" },
+        { id: "l4", title: "Contract Act | UNIT 6 | Contingent Contract", type: "audio", duration: "4:32", size: "4 MB", chapter: "Contract Act", fileUrl: "/assets/audio/Audio1.mp3" },
     ],
     economics: [
         { id: "e1", title: "Demand & Supply Analysis", type: "pdf", pages: 15, size: "3.2 MB", chapter: "Microeconomics" },
