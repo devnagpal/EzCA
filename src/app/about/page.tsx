@@ -13,25 +13,26 @@ export default function AboutPage() {
                 <div className="max-w-3xl mx-auto space-y-8">
                     <div className="space-y-4">
                         <h1 className="text-4xl md:text-5xl font-bold tracking-tight">About EzCA</h1>
-                        <p className="text-xl text-muted-foreground">Empowering Chartered Accountancy students with premium, high-quality study resources.</p>
+                        <p className="text-xl text-muted-foreground">EzCA is built by students, for students — because we know CA prep can get overwhelming real fast. Empowering CA students with premium, high-quality study resources.</p>
                     </div>
-                    
+
                     <div className="prose prose-invert max-w-none">
                         <h2 className="text-2xl font-semibold mt-8 mb-4">Our Mission</h2>
                         <p className="text-muted-foreground leading-relaxed">
-                            At EzCA, our mission is to simplify the complex world of Chartered Accountancy studies. We understand the sheer volume and difficulty of the syllabus. That's why we've built a platform that curates the best PDF notes, auditory revision materials, and an advanced AI Copilot to guide you through your journey. 
+                            At EzCA, Our goal is simple: provide quick, clean, exam-focused material that actually helps during revision time. No unnecessary fluff, no time waste — just the important questions, one-shot revisions, and notes you really need before exams.
                         </p>
-                        
+
                         <h2 className="text-2xl font-semibold mt-8 mb-4">Why Choose Us?</h2>
-                        <ul className="list-disc pl-6 space-y-2 text-muted-foreground">
-                            <li><strong className="text-white">Curated Content:</strong> We collaborate with top educators to ensure accuracy and relevance.</li>
-                            <li><strong className="text-white">Multi-modal Learning:</strong> Audio pockets for on-the-go revision and detailed PDF notes for deep dives.</li>
-                            <li><strong className="text-white">AI-Powered Assistance:</strong> Next-generation tools to solve your doubts instantly.</li>
-                        </ul>
+                        <p className="text-muted-foreground leading-relaxed">
+                            We created EzCA after seeing how most students struggle not because they lack ability, but because they don’t have the right revision support at the right time. This platform is our attempt to make CA Foundation prep more focused, efficient, and less stressful.
+                        </p>
 
                         <h2 className="text-2xl font-semibold mt-8 mb-4">The Team</h2>
                         <p className="text-muted-foreground leading-relaxed">
-                            We are a passionate team of educators, developers, and former CA students who understand exactly what it takes to succeed in these crucial exams.
+                            We’re continuously improving and adding new material. If EzCA makes your preparation even a little easier, we’re doing something right.
+                        </p>
+                        <p className="text-muted-foreground leading-relaxed">
+                            - Saksham & Dev
                         </p>
                     </div>
                 </div>

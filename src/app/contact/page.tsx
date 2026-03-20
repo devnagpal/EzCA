@@ -14,25 +14,26 @@ export default function ContactPage() {
                 <div className="max-w-3xl mx-auto space-y-8">
                     <div className="space-y-4">
                         <h1 className="text-4xl md:text-5xl font-bold tracking-tight">Contact Us</h1>
-                        <p className="text-xl text-muted-foreground">We're here to help. Reach out to us with any questions or feedback.</p>
+                        <p className="text-xl text-muted-foreground">Got a doubt, spotted a mistake, or want to contribute? We’d love to hear from you.</p>
                     </div>
-                    
+
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-12 mt-12">
                         <div className="space-y-6">
                             <div>
                                 <h3 className="text-xl font-semibold mb-2">Get in Touch</h3>
-                                <p className="text-muted-foreground">Have a question about our study materials or your subscription? Our support team is ready to assist you.</p>
+                                <p className="text-muted-foreground">You can contact us for: Doubts related to material, Reporting errors or typos, Suggestions and feedback, Collaboration opportunities.</p>
                             </div>
-                            
+
                             <div className="space-y-4">
                                 <div className="flex flex-col space-y-1">
                                     <span className="font-medium text-primary">Email Support</span>
-                                    <a href="mailto:support@ezca.edu" className="text-muted-foreground hover:text-white transition-colors">support@ezca.edu</a>
+                                    <a href="mailto:ezca2431@gmail.com" className="text-muted-foreground hover:text-white transition-colors">ezca2431@gmail.com</a>
                                 </div>
                                 <div className="flex flex-col space-y-1">
-                                    <span className="font-medium text-primary">Business Inquiries</span>
-                                    <a href="mailto:partners@ezca.edu" className="text-muted-foreground hover:text-white transition-colors">partners@ezca.edu</a>
+                                    <span className="font-medium text-primary">Response Time</span>
+                                    <span className="text-muted-foreground">Usually within 24-48 hours</span>
                                 </div>
+                                <p>We read everything — and yes, student feedback actually shapes EzCA.</p>
                             </div>
                         </div>
 
