@@ -9,7 +9,7 @@ export const subjects = [
         color: "from-blue-500 to-indigo-500",
         gradient: "bg-gradient-to-br from-blue-500/10 to-indigo-500/10 hover:from-blue-500/20 hover:to-indigo-500/20",
         border: "group-hover:border-blue-500/50",
-        stats: { pdfs: 12, audios: 5 },
+        stats: { pdfs: 2, audios: 2 },
     },
     {
         slug: "economics",
@@ -19,7 +19,7 @@ export const subjects = [
         color: "from-emerald-500 to-teal-500",
         gradient: "bg-gradient-to-br from-emerald-500/10 to-teal-500/10 hover:from-emerald-500/20 hover:to-teal-500/20",
         border: "group-hover:border-emerald-500/50",
-        stats: { pdfs: 8, audios: 4 },
+        stats: { pdfs: 1, audios: 0 },
     },
     {
         slug: "accounting",
@@ -29,7 +29,7 @@ export const subjects = [
         color: "from-orange-500 to-red-500",
         gradient: "bg-gradient-to-br from-orange-500/10 to-red-500/10 hover:from-orange-500/20 hover:to-red-500/20",
         border: "group-hover:border-orange-500/50",
-        stats: { pdfs: 15, audios: 6 },
+        stats: { pdfs: 2, audios: 1 },
     },
     {
         slug: "quant",
@@ -39,7 +39,7 @@ export const subjects = [
         color: "from-purple-500 to-pink-500",
         gradient: "bg-gradient-to-br from-purple-500/10 to-pink-500/10 hover:from-purple-500/20 hover:to-pink-500/20",
         border: "group-hover:border-purple-500/50",
-        stats: { pdfs: 20, audios: 8 },
+        stats: { pdfs: 1, audios: 0 },
     },
 ];
 
@@ -80,9 +80,7 @@ export const mockResources: Record<string, StudyResource[]> = {
         { id: "l4", title: "Contract Act | UNIT 6 | Contingent Contract", type: "audio", duration: "4:32", size: "4 MB", chapter: "Contract Act", fileUrl: "/assets/audio/Audio1.mp3" },
     ],
     economics: [
-        { id: "e1", title: "Demand & Supply Analysis", type: "pdf", pages: 15, size: "3.2 MB", chapter: "Microeconomics" },
-        { id: "e2", title: "Market Structures Summary", type: "pdf", pages: 10, size: "1.8 MB", chapter: "Markets" },
-        { id: "e3", title: "Business Cycles Audio", type: "audio", duration: "12:15", size: "10 MB", chapter: "Macroeconomics" },
+        { id: "e1", title: "Theory of Demand & Supply | MCQs", type: "pdf", pages: 7, size: "323 KB", chapter: "Microeconomics", fileUrl: "/assets/pdfs/THEORY-OF-DEMAND-SUPPLY-MCQS_1.pdf" },
     ],
     accounting: [
         { id: "a1", title: "BRS - Concept Notes", type: "pdf", pages: 6, size: "1.5 MB", chapter: "Bank Reconciliation" },
@@ -90,8 +88,6 @@ export const mockResources: Record<string, StudyResource[]> = {
         { id: "a3", title: "Final Accounts Adjustment Audio", type: "audio", duration: "20:00", size: "18 MB", chapter: "Final Accounts" },
     ],
     quant: [
-        { id: "q1", title: "Time Value of Money Formulas", type: "pdf", pages: 5, size: "1.2 MB", chapter: "TVM" },
-        { id: "q2", title: "Logical Reasoning Tricks", type: "pdf", pages: 11, size: "2.5 MB", chapter: "LR" },
-        { id: "q3", title: "Statistics Theory Audio", type: "audio", duration: "18:45", size: "16 MB", chapter: "Statistics" },
+        { id: "q1", title: "Mathematics of Finance Formulas", type: "pdf", pages: 4, size: "131 KB", chapter: "Mathematics of Finance", fileUrl: "/assets/pdfs/MATHEMATICS-OF-FINANCE-FULL-FORMULA-SHEET.pdf" },
     ],
 };
