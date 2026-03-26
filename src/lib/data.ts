@@ -80,7 +80,7 @@ export const mockResources: Record<string, StudyResource[]> = {
         { id: "l4", title: "Contract Act | UNIT 6 | Contingent Contract", type: "audio", duration: "4:32", size: "4 MB", chapter: "Contract Act", fileUrl: "/assets/audio/Audio1.mp3" },
     ],
     economics: [
-        { id: "e1", title: "Theory of Demand & Supply | MCQs", type: "pdf", pages: 7, size: "323 KB", chapter: "Microeconomics", fileUrl: "/assets/pdfs/THEORY-OF-DEMAND-SUPPLY-MCQS_1.pdf" },
+        { id: "e1", title: "Theory of Demand & Supply | MCQs", type: "pdf", pages: 7, size: "323 KB", chapter: "Microeconomics", fileUrl: "/assets/pdfs/THEORY-OF-DEMAND-AND-SUPPLY-MCQs_1.pdf" },
     ],
     accounting: [
         { id: "a1", title: "BRS - Concept Notes", type: "pdf", pages: 6, size: "1.5 MB", chapter: "Bank Reconciliation" },
