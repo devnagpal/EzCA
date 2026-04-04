@@ -9,7 +9,7 @@ export const subjects = [
         color: "from-blue-500 to-indigo-500",
         gradient: "bg-gradient-to-br from-blue-500/10 to-indigo-500/10 hover:from-blue-500/20 hover:to-indigo-500/20",
         border: "group-hover:border-blue-500/50",
-        stats: { pdfs: 2, audios: 2 },
+        stats: { pdfs: 3, audios: 2 },
     },
     {
         slug: "economics",
@@ -39,7 +39,7 @@ export const subjects = [
         color: "from-purple-500 to-pink-500",
         gradient: "bg-gradient-to-br from-purple-500/10 to-pink-500/10 hover:from-purple-500/20 hover:to-pink-500/20",
         border: "group-hover:border-purple-500/50",
-        stats: { pdfs: 1, audios: 0 },
+        stats: { pdfs: 2, audios: 0 },
     },
 ];
 
@@ -78,6 +78,7 @@ export const mockResources: Record<string, StudyResource[]> = {
         { id: "l2", title: "Indian Regulatory Framework | Flash Cards for Quick Revision", type: "pdf", pages: 26, size: "347 KB", chapter: "Companies Act", fileUrl: "/assets/pdfs/INDIAN-REGULATORY-FRAMEWORK-FLASH-CARDS.pdf" },
         { id: "l3", title: "Indian Regulatory Framework | Full Chapter Audio Revision", type: "audio", duration: "06:08", size: "2.80 MB", chapter: "Indian Regulatory Framework", fileUrl: "/assets/audio/INDIAN-REGULATORY-FRAMEWORK-FULL-CHAPTER-AUDIO-REVISION.mp3" },
         { id: "l4", title: "Contract Act | UNIT 6 | Contingent Contract", type: "audio", duration: "4:32", size: "4 MB", chapter: "Contract Act", fileUrl: "/assets/audio/Audio1.mp3" },
+        { id: "l5", title: "Limited Liability Partnership | First Time Learner Full Notes", type: "pdf", pages: 12, size: "154 KB", chapter: "Limited Liability Partnership", fileUrl: "/assets/pdfs/LLP-LEARNING-FULL-NOTES.pdf" },
     ],
     economics: [
         { id: "e1", title: "Theory of Demand & Supply | MCQs", type: "pdf", pages: 7, size: "323 KB", chapter: "Microeconomics", fileUrl: "/assets/pdfs/THEORY-OF-DEMAND-AND-SUPPLY-MCQs_1.pdf" },
@@ -89,5 +90,6 @@ export const mockResources: Record<string, StudyResource[]> = {
     ],
     quant: [
         { id: "q1", title: "Mathematics of Finance Formulas", type: "pdf", pages: 4, size: "131 KB", chapter: "Mathematics of Finance", fileUrl: "/assets/pdfs/MATHEMATICS-OF-FINANCE-FULL-FORMULA-SHEET.pdf" },
+        { id: "q2", title: "Index Numbers | Cheat Sheet", type: "pdf", pages: 3, size: "40 KB", chapter: "Index Numbers", fileUrl: "/assets/pdfs/INDEX-NUMBERS-CHEAT-SHEET.pdf" },
     ],
 };
