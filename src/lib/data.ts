@@ -9,7 +9,7 @@ export const subjects = [
         color: "from-blue-500 to-indigo-500",
         gradient: "bg-gradient-to-br from-blue-500/10 to-indigo-500/10 hover:from-blue-500/20 hover:to-indigo-500/20",
         border: "group-hover:border-blue-500/50",
-        stats: { pdfs: 3, audios: 2 },
+        stats: { pdfs: 4, audios: 2 },
     },
     {
         slug: "economics",
@@ -79,6 +79,7 @@ export const mockResources: Record<string, StudyResource[]> = {
         { id: "l3", title: "Indian Regulatory Framework | Full Chapter Audio Revision", type: "audio", duration: "06:08", size: "2.80 MB", chapter: "Indian Regulatory Framework", fileUrl: "/assets/audio/INDIAN-REGULATORY-FRAMEWORK-FULL-CHAPTER-AUDIO-REVISION.mp3" },
         { id: "l4", title: "Contract Act | UNIT 6 | Contingent Contract", type: "audio", duration: "4:32", size: "4 MB", chapter: "Contract Act", fileUrl: "/assets/audio/Audio1.mp3" },
         { id: "l5", title: "Limited Liability Partnership | First Time Learner Full Notes", type: "pdf", pages: 12, size: "154 KB", chapter: "Limited Liability Partnership", fileUrl: "/assets/pdfs/LLP-LEARNING-FULL-NOTES.pdf" },
+        { id: "l6", title: "Negotiable Instruments Act | Full Chapter Notes", type: "pdf", pages: 15, size: "232 KB", chapter: "Negotiable Instruments Act", fileUrl: "/assets/pdfs/NEGOTIABLE-INSTRUMENTS-ACT.pdf" },
     ],
     economics: [
         { id: "e1", title: "Theory of Demand & Supply | MCQs", type: "pdf", pages: 7, size: "323 KB", chapter: "Microeconomics", fileUrl: "/assets/pdfs/THEORY-OF-DEMAND-AND-SUPPLY-MCQs_1.pdf" },
