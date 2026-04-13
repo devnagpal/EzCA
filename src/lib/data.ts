@@ -19,7 +19,7 @@ export const subjects = [
         color: "from-emerald-500 to-teal-500",
         gradient: "bg-gradient-to-br from-emerald-500/10 to-teal-500/10 hover:from-emerald-500/20 hover:to-teal-500/20",
         border: "group-hover:border-emerald-500/50",
-        stats: { pdfs: 1, audios: 0 },
+        stats: { pdfs: 2, audios: 0 },
     },
     {
         slug: "accounting",
@@ -83,6 +83,7 @@ export const mockResources: Record<string, StudyResource[]> = {
     ],
     economics: [
         { id: "e1", title: "Theory of Demand & Supply | MCQs", type: "pdf", pages: 7, size: "323 KB", chapter: "Microeconomics", fileUrl: "/assets/pdfs/THEORY-OF-DEMAND-AND-SUPPLY-MCQs_1.pdf" },
+        { id: "e2", title: "Indian Economy | Quick Revision Notes", type: "pdf", pages: 8, size: "32 KB", chapter: "Chapter 10: Indian Economy", fileUrl: "/assets/pdfs/Indian-Economy-Quick-Revision.pdf" },
     ],
     accounting: [
         { id: "a1", title: "BRS - Concept Notes", type: "pdf", pages: 6, size: "1.5 MB", chapter: "Bank Reconciliation" },
