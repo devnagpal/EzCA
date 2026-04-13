@@ -6,9 +6,10 @@ import { SectionWrapper } from "@/components/ui/SectionWrapper";
 import { Tabs } from "@/components/ui/Tabs";
 import { FileCard } from "@/components/subject/FileCard";
 import { motion } from "framer-motion";
-import { ArrowLeft } from "lucide-react";
+import { ArrowLeft, FileText, Headphones, FolderOpen } from "lucide-react";
 import Link from "next/link";
 import { useParams } from "next/navigation";
+import { cn } from "@/lib/utils";
 
 export default function SubjectPage() {
     const params = useParams();
@@ -19,65 +20,111 @@ export default function SubjectPage() {
 
     if (!subject) {
         return (
-            <div className="min-h-screen pt-32 text-center flex flex-col items-center justify-center">
-                <h1 className="text-2xl font-bold mb-4">Subject Not Found</h1>
-                <Link href="/" className="text-primary hover:underline">Return Home</Link>
+            <div className="min-h-screen pt-32 text-center flex flex-col items-center justify-center gap-4">
+                <div className="w-16 h-16 rounded-2xl bg-white/[0.04] flex items-center justify-center mb-2">
+                    <FolderOpen className="w-8 h-8 text-muted-foreground/50" />
+                </div>
+                <h1 className="text-2xl font-bold">Subject Not Found</h1>
+                <p className="text-muted-foreground text-sm">The subject you're looking for doesn't exist.</p>
+                <Link href="/" className="text-primary hover:text-primary/80 text-sm font-medium transition-colors">Return Home</Link>
             </div>
         );
     }
 
     const resources = mockResources[slug] || [];
+    const pdfCount = resources.filter(r => r.type === "pdf").length;
+    const audioCount = resources.filter(r => r.type === "audio").length;
     const filteredResources = resources.filter(r => r.type === activeTab);
 
+    const Icon = subject.icon;
+
     return (
-        <div className="pt-24 pb-20">
+        <div className="pt-24 pb-20 relative">
+            {/* Page header ambient glow */}
+            <div className="absolute top-0 left-0 right-0 h-80 pointer-events-none -z-10">
+                <div className={cn(
+                    "absolute top-0 left-1/4 w-96 h-64 rounded-full blur-[120px] opacity-10",
+                    `bg-gradient-to-br ${subject.color}`
+                )} />
+            </div>
+
             <SectionWrapper>
-                <Link href="/#subjects" className="inline-flex items-center text-sm text-muted-foreground hover:text-primary mb-8 transition-colors group">
-                    <ArrowLeft className="w-4 h-4 mr-2 group-hover:-translate-x-1 transition-transform" /> Back to Subjects
+                {/* Back navigation */}
+                <Link
+                    href="/#subjects"
+                    className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground mb-10 transition-colors group py-1.5 px-3 -ml-3 rounded-lg hover:bg-white/[0.03]"
+                >
+                    <ArrowLeft className="w-3.5 h-3.5 group-hover:-translate-x-0.5 transition-transform" />
+                    Back to Subjects
                 </Link>
 
-                <div className="mb-12">
-                    <motion.h1
+                {/* Page header */}
+                <div className="mb-10">
+                    <motion.div
                         initial={{ opacity: 0, y: 10 }}
                         animate={{ opacity: 1, y: 0 }}
-                        className="text-4xl md:text-6xl font-bold mb-4 text-white"
+                        className="flex items-start gap-4 mb-4"
                     >
-                        {subject.title}
-                    </motion.h1>
-                    <motion.p
-                        initial={{ opacity: 0, y: 10 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ delay: 0.1 }}
-                        className="text-xl text-muted-foreground max-w-2xl"
-                    >
-                        {subject.description}
-                    </motion.p>
+                        <div className={cn(
+                            "p-3 rounded-xl flex-shrink-0",
+                            "bg-gradient-to-br",
+                            subject.color,
+                            "opacity-15"
+                        )}
+                            style={{ position: 'relative' }}
+                        >
+                            <Icon className="w-7 h-7"
+                                style={{
+                                    color: subject.color.includes('blue') ? '#60a5fa'
+                                        : subject.color.includes('emerald') ? '#34d399'
+                                            : subject.color.includes('orange') ? '#fb923c'
+                                                : '#c084fc'
+                                }}
+                            />
+                        </div>
+                        <div>
+                            <h1 className="text-3xl md:text-5xl font-bold tracking-tight text-foreground">
+                                {subject.title}
+                            </h1>
+                            <p className="text-base md:text-lg text-muted-foreground mt-2 max-w-2xl">
+                                {subject.description}
+                            </p>
+                        </div>
+                    </motion.div>
                 </div>
 
+                {/* Tabs with counts */}
                 <Tabs
                     tabs={[
-                        { id: "pdf", label: "PDF Notes" },
-                        { id: "audio", label: "Audio Revisions" }
+                        { id: "pdf", label: "PDF Notes", count: pdfCount },
+                        { id: "audio", label: "Audio Revisions", count: audioCount }
                     ]}
                     activeTab={activeTab}
                     onChange={setActiveTab}
                 />
 
+                {/* Resource grid */}
                 <motion.div
                     key={activeTab}
-                    initial={{ opacity: 0, y: 10 }}
+                    initial={{ opacity: 0, y: 8 }}
                     animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.3 }}
-                    className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"
+                    transition={{ duration: 0.25 }}
+                    className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3"
                 >
                     {filteredResources.length > 0 ? (
-                        filteredResources.map((resource) => (
-                            <FileCard key={resource.id} resource={resource} />
+                        filteredResources.map((resource, i) => (
+                            <FileCard key={resource.id} resource={resource} index={i} />
                         ))
                     ) : (
-                        <div className="col-span-full py-16 text-center text-muted-foreground bg-white/5 rounded-2xl border border-dashed border-white/10">
-                            <p>No content available in this section yet.</p>
-                            <p className="text-sm mt-2">Check back soon!</p>
+                        <div className="col-span-full py-20 text-center rounded-2xl bg-white/[0.02] border border-dashed border-white/[0.06]">
+                            <div className="w-14 h-14 rounded-2xl bg-white/[0.04] flex items-center justify-center mx-auto mb-4">
+                                {activeTab === "pdf"
+                                    ? <FileText className="w-7 h-7 text-muted-foreground/40" />
+                                    : <Headphones className="w-7 h-7 text-muted-foreground/40" />
+                                }
+                            </div>
+                            <p className="text-muted-foreground font-medium">No {activeTab === "pdf" ? "PDF notes" : "audio revisions"} available yet.</p>
+                            <p className="text-sm text-muted-foreground/60 mt-1.5">New content is added regularly. Check back soon!</p>
                         </div>
                     )}
                 </motion.div>
