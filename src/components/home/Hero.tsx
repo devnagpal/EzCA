@@ -62,11 +62,11 @@ const featureCards = [
     },
     {
         icon: Sparkles,
-        title: "AI Solves Doubts",
-        description: "Instant answers for tricky concepts.",
+        title: "AI Copilot",
+        description: "Instant answers, quizzes & flashcards.",
         color: "text-purple-400",
         glow: "from-purple-500/10 to-purple-500/5",
-        badge: "Soon",
+        badge: "Live",
     },
 ];
 
@@ -93,7 +93,7 @@ export function Hero() {
                         className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-accent/[0.08] border border-accent/15 mb-8 shimmer"
                     >
                         <Sparkles className="w-3.5 h-3.5 text-accent" />
-                        <span className="text-xs font-medium text-accent tracking-wide">AI Study Copilot Coming Soon</span>
+                        <span className="text-xs font-medium text-accent tracking-wide">AI Study Copilot — Now Live</span>
                     </motion.div>
 
                     {/* Heading */}
@@ -154,7 +154,7 @@ export function Hero() {
                                         <div className="flex items-center gap-2 mb-2">
                                             <h3 className="text-base font-semibold text-foreground">{card.title}</h3>
                                             {card.badge && (
-                                                <span className="text-[10px] font-medium px-1.5 py-0.5 rounded-full bg-primary/10 text-primary/80">{card.badge}</span>
+                                                <span className={`text-[10px] font-medium px-1.5 py-0.5 rounded-full ${card.badge === 'Live' ? 'bg-emerald-500/15 text-emerald-400' : 'bg-primary/10 text-primary/80'}`}>{card.badge}</span>
                                             )}
                                         </div>
                                         <p className="text-sm text-muted-foreground leading-relaxed">{card.description}</p>

@@ -7,6 +7,8 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Menu, X, ChevronRight, BookOpen, Sparkles } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/Button";
+import { CopilotToggle } from "@/components/copilot/CopilotToggle";
+import { useCopilot } from "@/components/copilot/AiCopilotProvider";
 
 const navLinks = [
     { name: "Home", href: "/" },
@@ -18,6 +20,7 @@ export function Navbar() {
     const [scrolled, setScrolled] = useState(false);
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
     const pathname = usePathname();
+    const { isOpen } = useCopilot();
 
     useEffect(() => {
         const handleScroll = () => {
@@ -31,7 +34,8 @@ export function Navbar() {
         <>
             <header
                 className={cn(
-                    "fixed top-0 left-0 right-0 z-50 transition-all duration-500 border-b",
+                    "fixed top-0 left-0 z-50 transition-all duration-500 border-b",
+                    isOpen ? "md:right-[420px] lg:right-[480px]" : "right-0",
                     scrolled
                         ? "bg-background/70 backdrop-blur-xl backdrop-saturate-150 border-white/[0.06] shadow-[0_1px_40px_-10px_rgba(0,0,0,0.5)]"
                         : "bg-transparent border-transparent"

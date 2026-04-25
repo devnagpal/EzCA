@@ -9,13 +9,22 @@
     "lint": "eslint"
   },
   "dependencies": {
+    "@ai-sdk/anthropic": "^3.0.71",
+    "@supabase/supabase-js": "^2.104.1",
     "@vercel/analytics": "^1.6.1",
+    "@xenova/transformers": "^2.17.2",
+    "ai": "^6.0.168",
     "clsx": "^2.1.1",
+    "dotenv": "^17.4.2",
     "framer-motion": "^12.34.0",
     "lucide-react": "^0.564.0",
+    "nanoid": "^5.1.9",
     "next": "16.1.6",
+    "pdf-parse": "^2.4.5",
     "react": "19.2.3",
     "react-dom": "19.2.3",
+    "react-markdown": "^10.1.0",
+    "remark-gfm": "^4.0.1",
     "tailwind-merge": "^3.4.1"
   },
   "devDependencies": {
@@ -26,6 +35,7 @@
     "eslint": "^9",
     "eslint-config-next": "16.1.6",
     "tailwindcss": "^4",
+    "tsx": "^4.21.0",
     "typescript": "^5"
   }
 }

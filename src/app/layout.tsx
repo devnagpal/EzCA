@@ -1,9 +1,12 @@
 import type { Metadata } from "next";
+import { MainLayoutWrapper } from "@/components/layout/MainLayoutWrapper";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
 import { Analytics } from "@vercel/analytics/next";
+import { AiCopilotProvider } from "@/components/copilot/AiCopilotProvider";
+import { AiCopilotSidebar } from "@/components/copilot/AiCopilotSidebar";
 
 const geistSans = Geist({
     variable: "--font-geist-sans",
@@ -46,11 +49,16 @@ export default function RootLayout({
                     />
                 </div>
 
-                <Navbar />
-                <main className="flex-1 pt-16">
-                    {children}
-                </main>
-                <Footer />
+                <AiCopilotProvider>
+                    <MainLayoutWrapper>
+                        <Navbar />
+                        <main className="flex-1 pt-16">
+                            {children}
+                        </main>
+                        <Footer />
+                    </MainLayoutWrapper>
+                    <AiCopilotSidebar />
+                </AiCopilotProvider>
                 <Analytics />
             </body>
         </html>
