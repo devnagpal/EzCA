@@ -1,5 +1,7 @@
 // ─── Streaming Client ──────────────────────────────────────────────────
 // Client-side streaming consumer that talks to the Next.js API route.
+// Passes conversation history, subject context, and page context (including
+// active document content) to the backend for RAG-aware generation.
 
 import type { Message, SubjectContext, SourceCitation, ToolResult, PageContext } from './types';
 import { keywordRetriever } from './ragRetriever';
@@ -29,7 +31,7 @@ export async function streamCopilotResponse(
     }
 
     try {
-        // 1. Initial frontend retrieval (optional, could be fully moved to backend later)
+        // 1. Frontend source citation retrieval (for UI source chips)
         const sources = await keywordRetriever.search(
             lastUserMessage.content,
             context?.slug
@@ -38,17 +40,43 @@ export async function streamCopilotResponse(
             callbacks.onSources(sources.slice(0, 5));
         }
 
-        // 2. Call the API route
+        // 2. Build the page context payload for the backend
+        const pageContextPayload: Record<string, unknown> = {};
+        if (pageContext) {
+            if (pageContext.activeResource) {
+                pageContextPayload.title = pageContext.activeResource.title;
+                pageContextPayload.type = pageContext.activeResource.type;
+                pageContextPayload.chapter = pageContext.activeResource.chapter;
+                pageContextPayload.fileUrl = pageContext.activeResource.fileUrl;
+            }
+            if (pageContext.content) {
+                pageContextPayload.content = pageContext.content;
+            }
+            if (pageContext.subjectSlug) {
+                pageContextPayload.subjectSlug = pageContext.subjectSlug;
+            }
+            if (pageContext.activeTab) {
+                pageContextPayload.activeTab = pageContext.activeTab;
+            }
+        }
+
+        // 3. Call the API route
         const response = await fetch('/api/copilot/chat', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify({
-                messages,
-                subjectContext: context,
-                pageContext,
-                history: [] // the backend can reconstruct history from messages if needed
+                messages: messages.map(m => ({
+                    role: m.role,
+                    content: m.content,
+                })),
+                subjectContext: context ? {
+                    slug: context.slug,
+                    title: context.title,
+                } : null,
+                pageContext: Object.keys(pageContextPayload).length > 0 ? pageContextPayload : null,
+                conversationId: null, // Could be passed for server-side logging
             }),
             signal,
         });
@@ -67,7 +95,7 @@ export async function streamCopilotResponse(
         let isToolBlock = false;
         let toolBuffer = '';
 
-        // 3. Read the stream chunks
+        // 4. Read the stream chunks
         while (true) {
             const { done, value } = await reader.read();
             if (done) break;

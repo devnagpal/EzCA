@@ -55,8 +55,8 @@ export const features = [
         icon: Headphones,
     },
     {
-        title: "AI Copilot (Soon)",
-        description: "Instant doubt solving and personalized study schedules.",
+        title: "AI Copilot",
+        description: "Instant doubt solving, quizzes, flashcards, and personalized study assistance.",
         icon: Sparkles,
     },
 ];

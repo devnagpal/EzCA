@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { subjects, mockResources } from "@/lib/data";
 import { SectionWrapper } from "@/components/ui/SectionWrapper";
 import { Tabs } from "@/components/ui/Tabs";
@@ -10,6 +10,7 @@ import { ArrowLeft, FileText, Headphones, FolderOpen } from "lucide-react";
 import Link from "next/link";
 import { useParams } from "next/navigation";
 import { cn } from "@/lib/utils";
+import { useCopilot } from "@/components/copilot/AiCopilotProvider";
 
 export default function SubjectPage() {
     const params = useParams();
@@ -17,6 +18,20 @@ export default function SubjectPage() {
 
     const subject = subjects.find(s => s.slug === slug);
     const [activeTab, setActiveTab] = useState("pdf");
+    const { setPageContext } = useCopilot();
+
+    // Pass subject + tab context to the Copilot
+    useEffect(() => {
+        if (subject) {
+            setPageContext({
+                subjectSlug: slug,
+                activeTab: activeTab as 'pdf' | 'audio',
+            });
+        }
+        return () => {
+            setPageContext(null);
+        };
+    }, [slug, activeTab, subject, setPageContext]);
 
     if (!subject) {
         return (

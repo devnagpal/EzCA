@@ -102,6 +102,8 @@ export interface PageContext {
     subjectSlug?: string;
     /** Currently active tab on subject page */
     activeTab?: 'pdf' | 'audio';
+    /** Extracted text content from active document (for RAG) */
+    content?: string;
 }
 
 export interface CopilotState {

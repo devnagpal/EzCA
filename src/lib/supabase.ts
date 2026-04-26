@@ -1,11 +1,29 @@
-import { createClient } from '@supabase/supabase-js';
+import { createClient, SupabaseClient } from '@supabase/supabase-js';
 
-// Initialize Supabase Client
-// Ensure these environment variables are set in .env.local
+// ─── Supabase Client (Resilient Initialization) ──────────────────────
+// Creates a real client if valid credentials exist,
+// otherwise creates a null-safe stub that won't crash the build.
+
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || '';
 const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || '';
 
-export const supabase = createClient(supabaseUrl, supabaseAnonKey);
+function isValidUrl(url: string): boolean {
+    try {
+        new URL(url);
+        return true;
+    } catch {
+        return false;
+    }
+}
+
+const isConfigured = isValidUrl(supabaseUrl) && supabaseAnonKey.length > 10;
+
+// Export a real client or a safe placeholder
+export const supabase: SupabaseClient = isConfigured
+    ? createClient(supabaseUrl, supabaseAnonKey)
+    : createClient('https://placeholder.supabase.co', 'placeholder-key-for-build');
+
+export const isSupabaseReady = isConfigured;
 
 // ─── Database Schema Interfaces ──────────────────────────────────────────
 

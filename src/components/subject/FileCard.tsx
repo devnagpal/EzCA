@@ -6,6 +6,7 @@ import { motion } from "framer-motion";
 import { Button } from "@/components/ui/Button";
 import { cn } from "@/lib/utils";
 import { StudyResource } from "@/lib/data";
+import { useCopilot } from "@/components/copilot/AiCopilotProvider";
 
 interface FileCardProps {
     resource: StudyResource;
@@ -16,12 +17,39 @@ export function FileCard({ resource, index = 0 }: FileCardProps) {
     const isPdf = resource.type === "pdf";
     const Icon = isPdf ? FileText : Headphones;
     const [isPlaying, setIsPlaying] = useState(false);
+    const { setPageContext, pageContext } = useCopilot();
 
     const handleMainClick = () => {
         if (isPdf && resource.fileUrl) {
+            // Set active resource context so Copilot knows what the user is viewing
+            setPageContext({
+                ...pageContext,
+                activeResource: {
+                    id: resource.id,
+                    title: resource.title,
+                    type: resource.type,
+                    chapter: resource.chapter,
+                    fileUrl: resource.fileUrl,
+                },
+            });
             window.open(resource.fileUrl, '_blank');
         } else if (!isPdf && resource.fileUrl) {
-            setIsPlaying(!isPlaying);
+            const newPlaying = !isPlaying;
+            setIsPlaying(newPlaying);
+
+            // Set/clear active resource context for audio
+            if (newPlaying) {
+                setPageContext({
+                    ...pageContext,
+                    activeResource: {
+                        id: resource.id,
+                        title: resource.title,
+                        type: resource.type,
+                        chapter: resource.chapter,
+                        fileUrl: resource.fileUrl,
+                    },
+                });
+            }
         }
     };
 

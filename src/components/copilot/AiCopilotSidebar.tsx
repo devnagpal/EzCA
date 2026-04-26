@@ -1,20 +1,33 @@
 "use client";
 
 // ─── AI Copilot Sidebar ──────────────────────────────────────────────
-// Non-blocking side panel that slides in from the right without
-// dimming or blurring the main content. Users can freely browse
-// PDFs, audio, and subject pages while keeping the copilot open.
+// Non-blocking, resizable side panel that sits beside the main content.
+// Users can freely browse PDFs, audio, and subject pages while chatting.
+// Drag the left edge to resize between 320px and 800px.
 
-import { useEffect, useCallback } from "react";
+import { useEffect, useCallback, useRef, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { X, PanelLeftClose, PanelLeftOpen, Sparkles } from "lucide-react";
+import { X, PanelLeftClose, PanelLeftOpen, Sparkles, GripVertical } from "lucide-react";
 import { useCopilot } from "./AiCopilotProvider";
 import { ConversationList } from "./ConversationList";
 import { ChatThread } from "./ChatThread";
 import { cn } from "@/lib/utils";
 
+const MIN_WIDTH = 320;
+const MAX_WIDTH = 800;
+
 export function AiCopilotSidebar() {
-    const { isOpen, closeCopilot, isSidebarCollapsed, toggleSidebar } = useCopilot();
+    const {
+        isOpen,
+        closeCopilot,
+        isSidebarCollapsed,
+        toggleSidebar,
+        sidebarWidth,
+        setSidebarWidth,
+    } = useCopilot();
+
+    const [isResizing, setIsResizing] = useState(false);
+    const resizeRef = useRef<{ startX: number; startWidth: number } | null>(null);
 
     // Close on Escape
     const handleKeyDown = useCallback(
@@ -28,6 +41,38 @@ export function AiCopilotSidebar() {
         document.addEventListener("keydown", handleKeyDown);
         return () => document.removeEventListener("keydown", handleKeyDown);
     }, [handleKeyDown]);
+
+    // ─── Resize Logic ──────────────────────────────────────────────
+
+    const handleResizeStart = useCallback(
+        (e: React.PointerEvent) => {
+            e.preventDefault();
+            setIsResizing(true);
+            resizeRef.current = { startX: e.clientX, startWidth: sidebarWidth };
+
+            const handlePointerMove = (moveEvent: PointerEvent) => {
+                if (!resizeRef.current) return;
+                const delta = resizeRef.current.startX - moveEvent.clientX;
+                const newWidth = Math.min(MAX_WIDTH, Math.max(MIN_WIDTH, resizeRef.current.startWidth + delta));
+                setSidebarWidth(newWidth);
+            };
+
+            const handlePointerUp = () => {
+                setIsResizing(false);
+                resizeRef.current = null;
+                document.removeEventListener("pointermove", handlePointerMove);
+                document.removeEventListener("pointerup", handlePointerUp);
+                document.body.style.cursor = "";
+                document.body.style.userSelect = "";
+            };
+
+            document.addEventListener("pointermove", handlePointerMove);
+            document.addEventListener("pointerup", handlePointerUp);
+            document.body.style.cursor = "col-resize";
+            document.body.style.userSelect = "none";
+        },
+        [sidebarWidth, setSidebarWidth]
+    );
 
     return (
         <AnimatePresence>
@@ -43,7 +88,7 @@ export function AiCopilotSidebar() {
                         className="fixed inset-0 z-[60] bg-black/20 md:hidden"
                     />
 
-                    {/* Sidebar Panel — non-blocking, no content obstruction */}
+                    {/* Sidebar Panel — non-blocking, dynamically sized */}
                     <motion.aside
                         initial={{ x: "100%" }}
                         animate={{ x: 0 }}
@@ -54,11 +99,27 @@ export function AiCopilotSidebar() {
                             stiffness: 260,
                             mass: 0.8,
                         }}
-                        className={cn(
-                            "fixed top-0 right-0 bottom-0 z-[60] flex",
-                            "w-full md:w-[420px] lg:w-[480px]"
-                        )}
+                        className="fixed top-0 right-0 bottom-0 z-[60] flex w-full md:w-auto"
+                        style={{ width: typeof window !== 'undefined' && window.innerWidth >= 768 ? `${sidebarWidth}px` : '100%' }}
                     >
+                        {/* ─── Resize Handle (desktop only) ───────────────── */}
+                        <div
+                            onPointerDown={handleResizeStart}
+                            className={cn(
+                                "hidden md:flex items-center justify-center w-3 flex-shrink-0 cursor-col-resize group/resize z-10",
+                                "hover:bg-primary/10 transition-colors duration-150",
+                                isResizing && "bg-primary/15"
+                            )}
+                            title="Drag to resize"
+                        >
+                            <GripVertical
+                                className={cn(
+                                    "w-3 h-3 text-white/10 group-hover/resize:text-primary/40 transition-colors",
+                                    isResizing && "text-primary/50"
+                                )}
+                            />
+                        </div>
+
                         {/* Subtle left edge shadow for depth separation */}
                         <div className="absolute -left-8 top-0 bottom-0 w-8 bg-gradient-to-r from-transparent to-black/10 pointer-events-none md:block hidden" />
 

@@ -39,6 +39,7 @@ interface CopilotContextValue {
     subjectContext: SubjectContext | null;
     pageContext: PageContext | null;
     isStreaming: boolean;
+    sidebarWidth: number;
 
     // Actions
     toggleCopilot: () => void;
@@ -53,6 +54,7 @@ interface CopilotContextValue {
     regenerateLastMessage: () => Promise<void>;
     cancelStream: () => void;
     setPageContext: (ctx: PageContext | null) => void;
+    setSidebarWidth: (width: number) => void;
 
     // Computed
     activeConversation: Conversation | null;
@@ -76,6 +78,7 @@ export function AiCopilotProvider({ children }: { children: ReactNode }) {
     const [conversations, setConversations] = useState<Conversation[]>([]);
     const [isStreaming, setIsStreaming] = useState(false);
     const [pageContext, setPageContext] = useState<PageContext | null>(null);
+    const [sidebarWidth, setSidebarWidth] = useState(420);
     const abortRef = useRef<AbortController | null>(null);
 
     // Derive subject context from URL
@@ -343,6 +346,7 @@ export function AiCopilotProvider({ children }: { children: ReactNode }) {
         subjectContext,
         pageContext,
         isStreaming,
+        sidebarWidth,
         toggleCopilot,
         openCopilot,
         closeCopilot,
@@ -355,6 +359,7 @@ export function AiCopilotProvider({ children }: { children: ReactNode }) {
         regenerateLastMessage,
         cancelStream,
         setPageContext,
+        setSidebarWidth,
         activeConversation,
     };
 

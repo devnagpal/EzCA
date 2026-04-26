@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
-import { Menu, X, ChevronRight, BookOpen, Sparkles } from "lucide-react";
+import { Menu, X, ChevronRight, BookOpen } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/Button";
 import { CopilotToggle } from "@/components/copilot/CopilotToggle";
@@ -20,7 +20,7 @@ export function Navbar() {
     const [scrolled, setScrolled] = useState(false);
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
     const pathname = usePathname();
-    const { isOpen } = useCopilot();
+    const { isOpen, sidebarWidth } = useCopilot();
 
     useEffect(() => {
         const handleScroll = () => {
@@ -34,12 +34,14 @@ export function Navbar() {
         <>
             <header
                 className={cn(
-                    "fixed top-0 left-0 z-50 transition-all duration-500 border-b",
-                    isOpen ? "md:right-[420px] lg:right-[480px]" : "right-0",
+                    "fixed top-0 left-0 z-50 transition-all duration-300 border-b",
                     scrolled
                         ? "bg-background/70 backdrop-blur-xl backdrop-saturate-150 border-white/[0.06] shadow-[0_1px_40px_-10px_rgba(0,0,0,0.5)]"
                         : "bg-transparent border-transparent"
                 )}
+                style={{
+                    right: isOpen ? `${sidebarWidth}px` : '0px',
+                }}
             >
                 <div className="container mx-auto px-4 md:px-6 h-16 flex items-center justify-between">
                     <Link href="/" className="flex items-center gap-2.5 group">
@@ -75,10 +77,7 @@ export function Navbar() {
                     </nav>
 
                     <div className="hidden md:flex items-center gap-3">
-                        <div className="flex items-center gap-1.5 px-3 py-1 rounded-full bg-accent/[0.08] border border-accent/15 shimmer">
-                            <Sparkles className="w-3 h-3 text-accent/80" />
-                            <span className="text-[11px] font-medium text-accent/80 tracking-wide uppercase">AI Soon</span>
-                        </div>
+                        <CopilotToggle />
                         <Link href="/#subjects">
                             <Button size="sm" className="rounded-full px-5 h-8 text-xs">
                                 Start Learning
@@ -86,14 +85,17 @@ export function Navbar() {
                         </Link>
                     </div>
 
-                    {/* Mobile Menu Toggle */}
-                    <button
-                        className="md:hidden p-2 rounded-lg text-muted-foreground hover:text-foreground hover:bg-white/[0.04] transition-colors"
-                        onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-                        aria-label={mobileMenuOpen ? "Close menu" : "Open menu"}
-                    >
-                        {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
-                    </button>
+                    {/* Mobile Actions */}
+                    <div className="flex items-center gap-2 md:hidden">
+                        <CopilotToggle />
+                        <button
+                            className="p-2 rounded-lg text-muted-foreground hover:text-foreground hover:bg-white/[0.04] transition-colors"
+                            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+                            aria-label={mobileMenuOpen ? "Close menu" : "Open menu"}
+                        >
+                            {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+                        </button>
+                    </div>
                 </div>
             </header>
 
