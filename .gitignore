@@ -42,3 +42,12 @@ next-env.d.ts
 
 #issues
 /trash-check
+
+# RAG content (PDFs are too large for git)
+/content
+/content/**/*.pdf
+/content/**/*.mp3
+/content/**/*.wav
+
+# ONNX model cache (downloaded by @xenova/transformers)
+/.cache/

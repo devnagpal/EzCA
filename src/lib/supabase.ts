@@ -47,16 +47,18 @@ export interface DBMessage {
     created_at: string;
 }
 
-export interface DBDocument {
-    id: string; // uuid
-    resource_id: string; // e.g., 'laws-irf-pdf'
+export interface DBDocumentChunk {
+    id: string;              // uuid
+    resource_id: string;     // e.g., 'laws-chapter1'
+    subject_slug: string;    // e.g., 'laws'
+    type: 'pdf' | 'audio';
     title: string;
-    chapter: string;
+    chapter: string | null;
+    chunk_index: number;
     content: string;
-}
-
-export interface DBDocumentEmbedding {
-    id: string; // uuid
-    document_id: string; // fk
-    embedding: number[]; // vector(1536)
+    page_range: string | null;
+    file_name: string;
+    metadata: Record<string, unknown>;
+    embedding: number[];     // vector(384) for all-MiniLM-L6-v2
+    created_at: string;
 }

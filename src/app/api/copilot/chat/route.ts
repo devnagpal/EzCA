@@ -33,36 +33,74 @@ const IntentSchema = z.object({
 });
 
 // ─── Layer 2: Retrieval Helper ────────────────────────────────────────
+// Tries vector similarity search first, falls back to full-text search.
 
-async function retrieveContext(topic: string, subjectSlug?: string): Promise<string> {
+async function retrieveContext(
+    topic: string,
+    subjectSlug?: string,
+    resourceId?: string,
+): Promise<string> {
+    // Skip if Supabase isn't configured
+    if (
+        !process.env.NEXT_PUBLIC_SUPABASE_URL ||
+        process.env.NEXT_PUBLIC_SUPABASE_URL === 'your_supabase_project_url_here'
+    ) {
+        return '';
+    }
+
+    // ── Strategy 1: Vector similarity search (pgvector) ──────────
     try {
-        // Try text-based search in Supabase documents table
-        if (
-            process.env.NEXT_PUBLIC_SUPABASE_URL &&
-            process.env.NEXT_PUBLIC_SUPABASE_URL !== 'your_supabase_project_url_here'
-        ) {
-            let query = supabase
-                .from('documents')
-                .select('title, chapter, content')
-                .textSearch('content', topic.split(/\s+/).filter(w => w.length > 2).join(' | '), {
-                    type: 'plain',
-                    config: 'english',
-                });
+        const { embedQuery } = await import('@/lib/copilot/embeddings');
+        const queryEmbedding = await embedQuery(topic);
 
-            if (subjectSlug) {
-                query = query.eq('subject_slug', subjectSlug);
-            }
+        if (queryEmbedding) {
+            const { data, error } = await supabase.rpc('match_document_chunks', {
+                query_embedding: `[${queryEmbedding.join(',')}]`,
+                match_threshold: 0.45,
+                match_count: 5,
+                filter_subject: subjectSlug || null,
+                filter_resource: resourceId || null,
+            });
 
-            const { data } = await query.limit(5);
-
-            if (data && data.length > 0) {
+            if (!error && data && data.length > 0) {
+                console.log(`[RAG] Vector search found ${data.length} chunks (similarity: ${data[0].similarity.toFixed(3)})`);
                 return data
-                    .map((doc, i) => `[Source ${i + 1}: ${doc.title} — ${doc.chapter}]\n${doc.content}`)
+                    .map((chunk: { title: string; chapter: string; content: string; file_name: string; similarity: number }, i: number) =>
+                        `[Source ${i + 1}: ${chunk.title} — ${chunk.chapter} (${chunk.file_name}, relevance: ${(chunk.similarity * 100).toFixed(0)}%)]\n${chunk.content}`
+                    )
                     .join('\n\n---\n\n');
             }
         }
     } catch (e) {
-        console.warn('RAG retrieval failed, continuing without context:', e);
+        console.warn('[RAG] Vector search unavailable, trying text search:', e instanceof Error ? e.message : e);
+    }
+
+    // ── Strategy 2: Postgres full-text search fallback ────────────
+    try {
+        const searchTerms = topic.split(/\s+/).filter(w => w.length > 2).join(' | ');
+        if (!searchTerms) return '';
+
+        let query = supabase
+            .from('document_chunks')
+            .select('title, chapter, content, file_name')
+            .textSearch('content', searchTerms, { type: 'plain', config: 'english' });
+
+        if (subjectSlug) {
+            query = query.eq('subject_slug', subjectSlug);
+        }
+
+        const { data } = await query.limit(5);
+
+        if (data && data.length > 0) {
+            console.log(`[RAG] Full-text search found ${data.length} chunks`);
+            return data
+                .map((doc: { title: string; chapter: string; content: string; file_name: string }, i: number) =>
+                    `[Source ${i + 1}: ${doc.title} — ${doc.chapter} (${doc.file_name})]\n${doc.content}`
+                )
+                .join('\n\n---\n\n');
+        }
+    } catch (e) {
+        console.warn('[RAG] Full-text search failed:', e);
     }
 
     return '';

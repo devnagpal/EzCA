@@ -6,7 +6,9 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "ingest": "node scripts/ingest.mjs",
+    "ingest:clear": "node scripts/ingest.mjs --clear"
   },
   "dependencies": {
     "@ai-sdk/anthropic": "^3.0.71",
@@ -20,7 +22,7 @@
     "lucide-react": "^0.564.0",
     "nanoid": "^5.1.9",
     "next": "16.1.6",
-    "pdf-parse": "^2.4.5",
+    "pdf-parse": "^1.1.1",
     "react": "19.2.3",
     "react-dom": "19.2.3",
     "react-markdown": "^10.1.0",
