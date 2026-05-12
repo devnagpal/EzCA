@@ -9,7 +9,7 @@ export const subjects = [
         color: "from-blue-500 to-indigo-500",
         gradient: "bg-gradient-to-br from-blue-500/10 to-indigo-500/10 hover:from-blue-500/20 hover:to-indigo-500/20",
         border: "group-hover:border-blue-500/50",
-        stats: { pdfs: 4, audios: 2 },
+        stats: { pdfs: 11, audios: 2 },
     },
     {
         slug: "economics",
@@ -29,7 +29,7 @@ export const subjects = [
         color: "from-orange-500 to-red-500",
         gradient: "bg-gradient-to-br from-orange-500/10 to-red-500/10 hover:from-orange-500/20 hover:to-red-500/20",
         border: "group-hover:border-orange-500/50",
-        stats: { pdfs: 2, audios: 1 },
+        stats: { pdfs: 1, audios: 0 },
     },
     {
         slug: "quant",
@@ -39,7 +39,7 @@ export const subjects = [
         color: "from-purple-500 to-pink-500",
         gradient: "bg-gradient-to-br from-purple-500/10 to-pink-500/10 hover:from-purple-500/20 hover:to-pink-500/20",
         border: "group-hover:border-purple-500/50",
-        stats: { pdfs: 2, audios: 0 },
+        stats: { pdfs: 3, audios: 0 },
     },
 ];
 
@@ -80,18 +80,25 @@ export const mockResources: Record<string, StudyResource[]> = {
         { id: "l4", title: "Contract Act | UNIT 6 | Contingent Contract", type: "audio", duration: "4:32", size: "4 MB", chapter: "Contract Act", fileUrl: "/assets/audio/Audio1.mp3" },
         { id: "l5", title: "Limited Liability Partnership | First Time Learner Full Notes", type: "pdf", pages: 12, size: "154 KB", chapter: "Limited Liability Partnership", fileUrl: "/assets/pdfs/LLP-LEARNING-FULL-NOTES.pdf" },
         { id: "l6", title: "Negotiable Instruments Act | Full Chapter Notes", type: "pdf", pages: 15, size: "232 KB", chapter: "Negotiable Instruments Act", fileUrl: "/assets/pdfs/NEGOTIABLE-INSTRUMENTS-ACT.pdf" },
+        { id: "l7", title: "Sale Of Goods Act 1930 | Last Moment Revision", type: "pdf", pages: 10, size: "871 KB", chapter: "Sale Of Goods Act", fileUrl: "/assets/pdfs/Sale_of_Goods_Act_1930.pdf" },
+        { id: "l8", title: "Indian Partnership Act 1932 | Last Moment Revision", type: "pdf", pages: 9, size: "898 KB", chapter: "Indian Partnership Act", fileUrl: "/assets/pdfs/EZCA_Indian_Partnership_Act_1932.pdf" },
+        { id: "l9", title: "Indian Contract Act 1872 | Last Moment Revision", type: "pdf", pages: 19, size: "1 MB", chapter: "Indian Contract Act", fileUrl: "/assets/pdfs/EZCA_Indian_Contract_Act_1872.pdf" },
+        { id: "l10", title: "Companies Act 2013 | Last Moment Revision", type: "pdf", pages: 5, size: "461 KB", chapter: "Companies Act", fileUrl: "/assets/pdfs/EZCA_CompaniesAct2013.pdf" },
+        { id: "l11", title: "Negotiable Instruments Act 1881 | Last Moment Revision", type: "pdf", pages: 6, size: "491 KB", chapter: "Negotiable Instruments Act", fileUrl: "/assets/pdfs/EZCA_NegotiableInstrumentsAct.pdf" },
+        { id: "l12", title: "Limited Liability Partnership Act 2008 | Last Moment Revision", type: "pdf", pages: 7, size: "764 KB", chapter: "Limited Liability Partnership Act", fileUrl: "/assets/pdfs/EZCA_LLP_Act_2008.pdf" },
+        { id: "l13", title: "Indian Regulatory Framework | Last Moment Revision", type: "pdf", pages: 8, size: "861 KB", chapter: "Indian Regulatory Framework", fileUrl: "/assets/pdfs/EZCA_Indian_Regulatory_Framework.pdf" },
+
     ],
     economics: [
         { id: "e1", title: "Theory of Demand & Supply | MCQs", type: "pdf", pages: 7, size: "323 KB", chapter: "Microeconomics", fileUrl: "/assets/pdfs/THEORY-OF-DEMAND-AND-SUPPLY-MCQs_1.pdf" },
         { id: "e2", title: "Indian Economy | Quick Revision Notes", type: "pdf", pages: 8, size: "32 KB", chapter: "Chapter 10: Indian Economy", fileUrl: "/assets/pdfs/Indian-Economy-Quick-Revision.pdf" },
     ],
     accounting: [
-        { id: "a1", title: "BRS - Concept Notes", type: "pdf", pages: 6, size: "1.5 MB", chapter: "Bank Reconciliation" },
-        { id: "a2", title: "Depreciation Methods", type: "pdf", pages: 9, size: "2.1 MB", chapter: "Depreciation" },
-        { id: "a3", title: "Final Accounts Adjustment Audio", type: "audio", duration: "20:00", size: "18 MB", chapter: "Final Accounts" },
+        { id: "a1", title: "Theoretical Framework | Short Notes", type: "pdf", pages: 5, size: "165 KB", chapter: "Chapter 1: Meaning & Scope of Accounting", fileUrl: "/assets/pdfs/EZCA_Theoretical_Framework.pdf" },
     ],
     quant: [
         { id: "q1", title: "Mathematics of Finance Formulas", type: "pdf", pages: 4, size: "131 KB", chapter: "Mathematics of Finance", fileUrl: "/assets/pdfs/MATHEMATICS-OF-FINANCE-FULL-FORMULA-SHEET.pdf" },
         { id: "q2", title: "Index Numbers | Cheat Sheet", type: "pdf", pages: 3, size: "40 KB", chapter: "Index Numbers", fileUrl: "/assets/pdfs/INDEX-NUMBERS-CHEAT-SHEET.pdf" },
+        { id: "q3", title: "Last Day Formula Sheet | Quantitative Aptitude", type: "pdf", pages: 24, size: "14 MB", chapter: "Full Quantitative Aptitude Formula Sheet", fileUrl: "/assets/pdfs/LAST-DAY-FORMULA-SHEET.pdf" },
     ],
 };
