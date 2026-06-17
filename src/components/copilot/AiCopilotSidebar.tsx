@@ -11,6 +11,8 @@ import { X, PanelLeftClose, PanelLeftOpen, Sparkles, GripVertical } from "lucide
 import { useCopilot } from "./AiCopilotProvider";
 import { ConversationList } from "./ConversationList";
 import { ChatThread } from "./ChatThread";
+import { AuthGate } from "@/components/auth/AuthGate";
+import { useAuth } from "@/contexts/AuthContext";
 import { cn } from "@/lib/utils";
 
 const MIN_WIDTH = 320;
@@ -25,6 +27,7 @@ export function AiCopilotSidebar() {
         sidebarWidth,
         setSidebarWidth,
     } = useCopilot();
+    const { isAuthenticated } = useAuth();
 
     const [isResizing, setIsResizing] = useState(false);
     const resizeRef = useRef<{ startX: number; startWidth: number } | null>(null);
@@ -188,9 +191,18 @@ export function AiCopilotSidebar() {
                                     </button>
                                 </div>
 
-                                {/* Chat Thread */}
+                                {/* Chat Thread — gated for authenticated users */}
                                 <div className="flex-1 relative overflow-hidden">
-                                    <ChatThread />
+                                    {isAuthenticated ? (
+                                        <ChatThread />
+                                    ) : (
+                                        <div className="flex items-center justify-center h-full">
+                                            <AuthGate
+                                                title="Sign in to use Copilot"
+                                                description="Create a free account to unlock your personal AI study assistant, saved conversations, and smart revision tools."
+                                            />
+                                        </div>
+                                    )}
                                 </div>
                             </div>
                         </div>

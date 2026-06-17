@@ -32,6 +32,13 @@ function isSupabaseConfigured(): boolean {
     );
 }
 
+// ─── User ID helper ────────────────────────────────────────────────────────
+
+async function getCurrentUserId(): Promise<string | null> {
+    const { data: { user } } = await supabase.auth.getUser();
+    return user?.id ?? null;
+}
+
 // ─── Message Serialization Helpers ─────────────────────────────────────
 
 function dbToMessage(row: Record<string, unknown>): Message {
@@ -62,9 +69,13 @@ function dbToConversation(row: Record<string, unknown>, messages: Message[] = []
 
 const supabaseStore: ConversationStore = {
     async list() {
+        const userId = await getCurrentUserId();
+        if (!userId) return [];
+
         const { data: convRows, error } = await supabase
             .from('conversations')
             .select('*')
+            .eq('user_id', userId)
             .order('updated_at', { ascending: false });
 
         if (error || !convRows) return [];
@@ -105,11 +116,14 @@ const supabaseStore: ConversationStore = {
     },
 
     async create(title = 'New Chat', subjectSlug) {
+        const userId = await getCurrentUserId();
+
         const { data, error } = await supabase
             .from('conversations')
             .insert({
                 title,
                 subject_slug: subjectSlug || null,
+                user_id: userId,
             })
             .select()
             .single();
@@ -146,11 +160,14 @@ const supabaseStore: ConversationStore = {
     },
 
     async addMessage(convId, msg) {
+        const userId = await getCurrentUserId();
+
         await supabase
             .from('messages')
             .insert({
                 id: msg.id,
                 conversation_id: convId,
+                user_id: userId,
                 role: msg.role,
                 content: msg.content,
                 intent: msg.intent || null,

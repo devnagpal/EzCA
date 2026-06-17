@@ -7,6 +7,7 @@ import { Footer } from "@/components/layout/Footer";
 import { Analytics } from "@vercel/analytics/next";
 import { AiCopilotProvider } from "@/components/copilot/AiCopilotProvider";
 import { AiCopilotSidebar } from "@/components/copilot/AiCopilotSidebar";
+import { AuthProvider } from "@/contexts/AuthContext";
 
 const geistSans = Geist({
     variable: "--font-geist-sans",
@@ -49,16 +50,18 @@ export default function RootLayout({
                     />
                 </div>
 
-                <AiCopilotProvider>
-                    <MainLayoutWrapper>
-                        <Navbar />
-                        <main className="flex-1 pt-16">
-                            {children}
-                        </main>
-                        <Footer />
-                    </MainLayoutWrapper>
-                    <AiCopilotSidebar />
-                </AiCopilotProvider>
+                <AuthProvider>
+                    <AiCopilotProvider>
+                        <MainLayoutWrapper>
+                            <Navbar />
+                            <main className="flex-1 pt-16">
+                                {children}
+                            </main>
+                            <Footer />
+                        </MainLayoutWrapper>
+                        <AiCopilotSidebar />
+                    </AiCopilotProvider>
+                </AuthProvider>
                 <Analytics />
             </body>
         </html>

@@ -4,11 +4,13 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
-import { Menu, X, ChevronRight, BookOpen } from "lucide-react";
+import { Menu, X, ChevronRight, BookOpen, LayoutDashboard } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/Button";
 import { CopilotToggle } from "@/components/copilot/CopilotToggle";
 import { useCopilot } from "@/components/copilot/AiCopilotProvider";
+import { useAuth } from "@/contexts/AuthContext";
+import { UserMenu } from "@/components/auth/UserMenu";
 
 const navLinks = [
     { name: "Home", href: "/" },
@@ -21,6 +23,7 @@ export function Navbar() {
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
     const pathname = usePathname();
     const { isOpen, sidebarWidth } = useCopilot();
+    const { isAuthenticated, isLoading: authLoading } = useAuth();
 
     useEffect(() => {
         const handleScroll = () => {
@@ -78,11 +81,32 @@ export function Navbar() {
 
                     <div className="hidden md:flex items-center gap-3">
                         <CopilotToggle />
-                        <Link href="/#subjects">
-                            <Button size="sm" className="rounded-full px-5 h-8 text-xs">
-                                Start Learning
-                            </Button>
-                        </Link>
+                        {!authLoading && (
+                            isAuthenticated ? (
+                                <>
+                                    <Link href="/dashboard">
+                                        <Button variant="ghost" size="sm" className="rounded-full px-4 h-8 text-xs gap-1.5">
+                                            <LayoutDashboard className="w-3.5 h-3.5" />
+                                            Dashboard
+                                        </Button>
+                                    </Link>
+                                    <UserMenu />
+                                </>
+                            ) : (
+                                <>
+                                    <Link href="/auth/login">
+                                        <Button variant="ghost" size="sm" className="rounded-full px-4 h-8 text-xs" id="navbar-signin-btn">
+                                            Sign in
+                                        </Button>
+                                    </Link>
+                                    <Link href="/auth/signup">
+                                        <Button size="sm" className="rounded-full px-5 h-8 text-xs" id="navbar-signup-btn">
+                                            Get started
+                                        </Button>
+                                    </Link>
+                                </>
+                            )
+                        )}
                     </div>
 
                     {/* Mobile Actions */}
@@ -136,13 +160,28 @@ export function Navbar() {
                                 initial={{ opacity: 0, y: 10 }}
                                 animate={{ opacity: 1, y: 0 }}
                                 transition={{ delay: 0.3 }}
-                                className="mt-6"
+                                className="mt-6 flex flex-col gap-2"
                             >
-                                <Link href="/#subjects" onClick={() => setMobileMenuOpen(false)}>
-                                    <Button className="w-full" size="lg">
-                                        Start Learning Now
-                                    </Button>
-                                </Link>
+                                {isAuthenticated ? (
+                                    <Link href="/dashboard" onClick={() => setMobileMenuOpen(false)}>
+                                        <Button className="w-full" size="lg">
+                                            My Dashboard
+                                        </Button>
+                                    </Link>
+                                ) : (
+                                    <>
+                                        <Link href="/auth/signup" onClick={() => setMobileMenuOpen(false)}>
+                                            <Button className="w-full" size="lg">
+                                                Get started free
+                                            </Button>
+                                        </Link>
+                                        <Link href="/auth/login" onClick={() => setMobileMenuOpen(false)}>
+                                            <Button variant="ghost" className="w-full" size="lg">
+                                                Sign in
+                                            </Button>
+                                        </Link>
+                                    </>
+                                )}
                             </motion.div>
                         </nav>
                     </motion.div>

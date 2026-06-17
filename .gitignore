@@ -51,3 +51,6 @@ next-env.d.ts
 
 # ONNX model cache (downloaded by @xenova/transformers)
 /.cache/
+
+# Google OAuth Setup
+GOOGLE_OAUTH_SETUP.md

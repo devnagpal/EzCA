@@ -6,11 +6,14 @@ import { SectionWrapper } from "@/components/ui/SectionWrapper";
 import { Tabs } from "@/components/ui/Tabs";
 import { FileCard } from "@/components/subject/FileCard";
 import { motion } from "framer-motion";
-import { ArrowLeft, FileText, Headphones, FolderOpen } from "lucide-react";
+import { ArrowLeft, FileText, Headphones, FolderOpen, Bookmark, BookmarkCheck } from "lucide-react";
 import Link from "next/link";
 import { useParams } from "next/navigation";
 import { cn } from "@/lib/utils";
 import { useCopilot } from "@/components/copilot/AiCopilotProvider";
+import { useBookmarks } from "@/hooks/useBookmarks";
+import { useAuth } from "@/contexts/AuthContext";
+import { AuthGate } from "@/components/auth/AuthGate";
 
 export default function SubjectPage() {
     const params = useParams();
@@ -19,6 +22,9 @@ export default function SubjectPage() {
     const subject = subjects.find(s => s.slug === slug);
     const [activeTab, setActiveTab] = useState("pdf");
     const { setPageContext } = useCopilot();
+    const { isAuthenticated } = useAuth();
+    const { isBookmarked, toggleBookmark } = useBookmarks();
+    const [bookmarkPrompt, setBookmarkPrompt] = useState<string | null>(null);
 
     // Pass subject + tab context to the Copilot
     useEffect(() => {
@@ -127,9 +133,58 @@ export default function SubjectPage() {
                     className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3"
                 >
                     {filteredResources.length > 0 ? (
-                        filteredResources.map((resource, i) => (
-                            <FileCard key={resource.id} resource={resource} index={i} />
-                        ))
+                        filteredResources.map((resource, i) => {
+                            const bookmarked = isBookmarked(resource.id);
+                            return (
+                                <div key={resource.id} className="relative group/card">
+                                    <FileCard resource={resource} index={i} />
+                                    <div className="absolute top-3 right-3 z-10">
+                                        {isAuthenticated ? (
+                                            <button
+                                                id={`bookmark-${resource.id}`}
+                                                onClick={() => toggleBookmark({
+                                                    resource_id: resource.id,
+                                                    subject_slug: slug,
+                                                    resource_type: resource.type,
+                                                    resource_title: resource.title,
+                                                    file_url: resource.fileUrl,
+                                                })}
+                                                aria-label={bookmarked ? "Remove bookmark" : "Save resource"}
+                                                className={cn(
+                                                    "opacity-0 group-hover/card:opacity-100 p-1.5 rounded-lg transition-all duration-200",
+                                                    bookmarked
+                                                        ? "opacity-100 bg-primary/20 text-primary"
+                                                        : "bg-black/40 text-white/60 hover:text-primary hover:bg-primary/20"
+                                                )}
+                                            >
+                                                {bookmarked
+                                                    ? <BookmarkCheck className="w-4 h-4" />
+                                                    : <Bookmark className="w-4 h-4" />
+                                                }
+                                            </button>
+                                        ) : (
+                                            <div className="relative">
+                                                <button
+                                                    id={`bookmark-guest-${resource.id}`}
+                                                    onClick={() => setBookmarkPrompt(
+                                                        bookmarkPrompt === resource.id ? null : resource.id
+                                                    )}
+                                                    className="opacity-0 group-hover/card:opacity-100 p-1.5 rounded-lg bg-black/40 text-white/40 transition-all duration-200"
+                                                    aria-label="Sign in to bookmark"
+                                                >
+                                                    <Bookmark className="w-4 h-4" />
+                                                </button>
+                                                {bookmarkPrompt === resource.id && (
+                                                    <div className="absolute top-8 right-0 w-64 z-20">
+                                                        <AuthGate compact feature="save this resource" />
+                                                    </div>
+                                                )}
+                                            </div>
+                                        )}
+                                    </div>
+                                </div>
+                            );
+                        })
                     ) : (
                         <div className="col-span-full py-20 text-center rounded-2xl bg-white/[0.02] border border-dashed border-white/[0.06]">
                             <div className="w-14 h-14 rounded-2xl bg-white/[0.04] flex items-center justify-center mx-auto mb-4">
