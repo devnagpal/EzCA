@@ -8,6 +8,7 @@ import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
 import { CheckCircle2, AlertCircle, Eye, EyeOff } from "lucide-react";
+import type { AuthChangeEvent } from "@supabase/supabase-js";
 import { getBrowserClient } from "@/lib/supabase-client";
 import { Button } from "@/components/ui/Button";
 
@@ -25,7 +26,7 @@ export default function ResetPasswordPage() {
 
     // Supabase fires PASSWORD_RECOVERY event on this page
     useEffect(() => {
-        const { data: { subscription } } = supabase.auth.onAuthStateChange((event) => {
+        const { data: { subscription } } = supabase.auth.onAuthStateChange((event: AuthChangeEvent) => {
             if (event === "PASSWORD_RECOVERY") {
                 setSessionReady(true);
             }

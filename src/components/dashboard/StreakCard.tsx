@@ -4,7 +4,15 @@
 
 import { motion } from "framer-motion";
 import { Flame, Trophy, Calendar } from "lucide-react";
-import type { RevisionStreak } from "@/lib/database.types";
+// RevisionStreak defined inline (database.types doesn't exist — types are inline per file)
+interface RevisionStreak {
+    user_id: string;
+    current_streak: number;
+    longest_streak: number;
+    last_activity_date: string | null;
+    total_study_days: number;
+    updated_at: string;
+}
 
 interface StreakCardProps {
     streak: RevisionStreak | null;

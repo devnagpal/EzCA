@@ -13,7 +13,7 @@ import {
     useCallback,
     type ReactNode,
 } from "react";
-import type { User, Session, AuthError } from "@supabase/supabase-js";
+import type { User, Session, AuthError, AuthChangeEvent } from "@supabase/supabase-js";
 import { getBrowserClient } from "@/lib/supabase-client";
 
 // ─── Profile type (inline to avoid generic issues) ────────────────────────
@@ -107,7 +107,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
     useEffect(() => {
         // Get initial session
-        supabase.auth.getSession().then(({ data: { session } }) => {
+        supabase.auth.getSession().then(({ data }: { data: { session: Session | null } }) => {
+            const session = data.session;
             setSession(session);
             setUser(session?.user ?? null);
             if (session?.user) {
@@ -119,7 +120,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
         // Subscribe to auth changes (sign in, sign out, token refresh)
         const { data: { subscription } } = supabase.auth.onAuthStateChange(
-            async (_event, session) => {
+            async (_event: AuthChangeEvent, session: Session | null) => {
                 setSession(session);
                 setUser(session?.user ?? null);
                 if (session?.user) {
