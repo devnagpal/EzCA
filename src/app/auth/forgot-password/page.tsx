@@ -5,7 +5,7 @@
 import { useState } from "react";
 import Link from "next/link";
 import { motion } from "framer-motion";
-import { ArrowLeft, Mail, AlertCircle } from "lucide-react";
+import { ArrowLeft, Mail, AlertCircle, Home } from "lucide-react";
 import { getBrowserClient } from "@/lib/supabase-client";
 import { AuthFormField } from "@/components/auth/AuthFormField";
 import { Button } from "@/components/ui/Button";
@@ -53,13 +53,34 @@ export default function ForgotPasswordPage() {
                     <p className="text-sm text-muted-foreground leading-relaxed">
                         We sent a password reset link to{" "}
                         <span className="text-foreground font-medium">{email}</span>.
+                        Click the link in the email to set a new password.
+                    </p>
+                    <p className="text-xs text-muted-foreground/60 mt-2">
+                        Didn&apos;t receive it? Check your spam folder or{" "}
+                        <button
+                            onClick={() => setEmailSent(false)}
+                            className="text-primary hover:underline"
+                        >
+                            try again
+                        </button>.
                     </p>
                 </div>
-                <Link href="/auth/login">
-                    <Button variant="ghost" size="sm" className="rounded-full gap-2">
-                        <ArrowLeft className="w-3.5 h-3.5" /> Back to sign in
-                    </Button>
-                </Link>
+
+                {/* Always-visible navigation — user is never stranded */}
+                <div className="flex flex-col gap-2 w-full max-w-[200px]">
+                    <Link href="/auth/login" className="w-full">
+                        <Button variant="ghost" size="sm" className="w-full rounded-full gap-2">
+                            <ArrowLeft className="w-3.5 h-3.5" /> Back to sign in
+                        </Button>
+                    </Link>
+                    <Link
+                        href="/"
+                        className="text-sm text-muted-foreground hover:text-foreground
+                                   flex items-center justify-center gap-1.5 transition-colors"
+                    >
+                        <Home className="w-3.5 h-3.5" /> Back to home
+                    </Link>
+                </div>
             </motion.div>
         );
     }

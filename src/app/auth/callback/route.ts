@@ -1,10 +1,16 @@
-// ─── OAuth Callback Route ──────────────────────────────────────────────────
-// Handles the OAuth redirect from Google (and any other providers).
-// Exchanges the authorization code for a Supabase session, then redirects.
+// ─── OAuth & Email Callback Route ─────────────────────────────────────────
+// Handles two cases:
+//   1. OAuth redirect from Google (authorization code exchange)
+//   2. Email confirmation / magic link (handled by Supabase JS on the client
+//      via hash fragment — this route just redirects to /auth/reset-password
+//      for password-reset emails, and to `next` for confirmations)
+//
+// The `next` query param controls where to redirect after successful auth.
 
 import { NextResponse } from "next/server";
 import { createServerClient } from "@supabase/ssr";
 import { cookies } from "next/headers";
+import { env } from "@/lib/env";
 
 export async function GET(request: Request) {
     const { searchParams, origin } = new URL(request.url);
@@ -13,7 +19,7 @@ export async function GET(request: Request) {
     const error = searchParams.get("error");
     const errorDescription = searchParams.get("error_description");
 
-    // Handle OAuth errors (e.g., user denied access)
+    // ── Handle OAuth provider errors (e.g., user denied access) ──────────
     if (error) {
         console.error("OAuth error:", error, errorDescription);
         return NextResponse.redirect(
@@ -21,12 +27,13 @@ export async function GET(request: Request) {
         );
     }
 
+    // ── Exchange authorization code for session ────────────────────────
     if (code) {
         const cookieStore = await cookies();
 
         const supabase = createServerClient(
-            process.env.NEXT_PUBLIC_SUPABASE_URL!,
-            process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+            env.supabaseUrl,
+            env.supabaseAnonKey,
             {
                 cookies: {
                     getAll() {
@@ -44,7 +51,7 @@ export async function GET(request: Request) {
         const { error: exchangeError } = await supabase.auth.exchangeCodeForSession(code);
 
         if (!exchangeError) {
-            // Redirect to intended destination after successful auth
+            // Use x-forwarded-host in production (Vercel sets this correctly)
             const forwardedHost = request.headers.get("x-forwarded-host");
             const isLocalEnv = process.env.NODE_ENV === "development";
 
@@ -60,6 +67,8 @@ export async function GET(request: Request) {
         }
     }
 
-    // Fallback — something went wrong
-    return NextResponse.redirect(`${origin}/auth/login?error=auth_callback_failed`);
+    // ── Fallback — something went wrong ───────────────────────────────
+    return NextResponse.redirect(
+        `${origin}/auth/login?error=${encodeURIComponent("Authentication failed. Please try again.")}`
+    );
 }

@@ -29,8 +29,10 @@ export function UserMenu() {
     const handleSignOut = async () => {
         setIsOpen(false);
         await signOut();
-        router.push("/");
+        // Refresh RSC cache BEFORE navigating so the homepage layout
+        // renders with the correct (unauthenticated) server state
         router.refresh();
+        router.push("/");
     };
 
     const displayName = profile?.display_name ?? user?.email?.split("@")[0] ?? "User";

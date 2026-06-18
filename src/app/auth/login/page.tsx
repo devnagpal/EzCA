@@ -43,18 +43,26 @@ function LoginForm() {
         setIsPending(true);
         setError(null);
 
-        const { error } = await signIn({ email, password });
+        try {
+            const { error } = await signIn({ email, password });
 
-        if (error) {
-            setError(
-                error.message === "Invalid login credentials"
-                    ? "Incorrect email or password. Please try again."
-                    : error.message
-            );
+            if (error) {
+                setError(
+                    error.message === "Invalid login credentials"
+                        ? "Incorrect email or password. Please try again."
+                        : error.message
+                );
+            } else {
+                // Refresh RSC cache first so Navbar shows authenticated state
+                // before navigating — prevents flash of wrong auth UI
+                router.refresh();
+                router.push(redirectTo);
+            }
+        } catch (err: unknown) {
+            setError(err instanceof Error ? err.message : "Sign in failed. Please try again.");
+        } finally {
+            // Always clear the spinner — never leave the button stuck
             setIsPending(false);
-        } else {
-            router.push(redirectTo);
-            router.refresh();
         }
     };
 

@@ -4,6 +4,14 @@
 // Global auth state provider. Wraps the entire app.
 // Provides: user, profile, session, isLoading, isAuthenticated,
 // signIn, signUp, signOut, signInWithGoogle, updateProfile.
+//
+// Key design decisions:
+//   - router.refresh() is called on every auth state change so that the
+//     Next.js RSC cache is invalidated and the Navbar/layout always reflects
+//     the true session state (fixes stale public layout after sign-out/back).
+//   - PASSWORD_RECOVERY event is handled separately — it sets sessionReady
+//     state without loading a profile (reset-password page handles the next step).
+//   - SIGNED_OUT is handled explicitly to clear state instantly.
 
 import {
     createContext,
@@ -11,8 +19,10 @@ import {
     useEffect,
     useState,
     useCallback,
+    useRef,
     type ReactNode,
 } from "react";
+import { useRouter } from "next/navigation";
 import type { User, Session, AuthError, AuthChangeEvent } from "@supabase/supabase-js";
 import { getBrowserClient } from "@/lib/supabase-client";
 
@@ -80,6 +90,11 @@ export function useAuth() {
 
 export function AuthProvider({ children }: { children: ReactNode }) {
     const supabase = getBrowserClient();
+    const router = useRouter();
+
+    // Use a ref for router to avoid stale closures inside onAuthStateChange
+    const routerRef = useRef(router);
+    useEffect(() => { routerRef.current = router; }, [router]);
 
     const [user, setUser] = useState<User | null>(null);
     const [profile, setProfile] = useState<Profile | null>(null);
@@ -106,33 +121,70 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     // ── Session bootstrap ────────────────────────────────────────────────
 
     useEffect(() => {
-        // Get initial session
+        let mounted = true;
+
+        // Get initial session — sets state before listener fires
         supabase.auth.getSession().then(({ data }: { data: { session: Session | null } }) => {
-            const session = data.session;
-            setSession(session);
-            setUser(session?.user ?? null);
-            if (session?.user) {
-                loadProfile(session.user.id).finally(() => setIsLoading(false));
+            if (!mounted) return;
+            const s = data.session;
+            setSession(s);
+            setUser(s?.user ?? null);
+            if (s?.user) {
+                loadProfile(s.user.id).finally(() => {
+                    if (mounted) setIsLoading(false);
+                });
             } else {
                 setIsLoading(false);
             }
         });
 
-        // Subscribe to auth changes (sign in, sign out, token refresh)
+        // Subscribe to auth changes (sign in, sign out, token refresh, password recovery)
         const { data: { subscription } } = supabase.auth.onAuthStateChange(
-            async (_event: AuthChangeEvent, session: Session | null) => {
-                setSession(session);
-                setUser(session?.user ?? null);
-                if (session?.user) {
-                    await loadProfile(session.user.id);
+            async (event: AuthChangeEvent, s: Session | null) => {
+                if (!mounted) return;
+
+                // ── SIGNED_OUT: clear everything immediately ──────────────
+                if (event === "SIGNED_OUT") {
+                    setSession(null);
+                    setUser(null);
+                    setProfile(null);
+                    setIsLoading(false);
+                    // Invalidate RSC cache so Navbar reflects sign-out instantly
+                    routerRef.current.refresh();
+                    return;
+                }
+
+                // ── PASSWORD_RECOVERY: session is set but don't load profile ──
+                // The reset-password page handles this event itself.
+                if (event === "PASSWORD_RECOVERY") {
+                    setSession(s);
+                    setUser(s?.user ?? null);
+                    setIsLoading(false);
+                    return;
+                }
+
+                // ── SIGNED_IN / TOKEN_REFRESHED / USER_UPDATED ────────────
+                setSession(s);
+                setUser(s?.user ?? null);
+
+                if (s?.user) {
+                    await loadProfile(s.user.id);
                 } else {
                     setProfile(null);
                 }
+
                 setIsLoading(false);
+
+                // Invalidate RSC cache so server layout reflects the new session.
+                // This fixes the stale Navbar after sign-in and browser back/forward.
+                routerRef.current.refresh();
             }
         );
 
-        return () => subscription.unsubscribe();
+        return () => {
+            mounted = false;
+            subscription.unsubscribe();
+        };
     }, [supabase, loadProfile]);
 
     // ── Auth Actions ─────────────────────────────────────────────────────
@@ -180,6 +232,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
     const signOut = useCallback(async () => {
         await supabase.auth.signOut();
+        // onAuthStateChange(SIGNED_OUT) fires and calls router.refresh()
     }, [supabase]);
 
     const updateProfile = useCallback(async (updates: Partial<Omit<Profile, 'id' | 'created_at'>>) => {
